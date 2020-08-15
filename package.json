@@ -1,0 +1,28 @@
+{
+    "version": "0.0.1",
+    "name": "pms-android",
+    "app-name": "PimpMyStremio",
+    "package-name": "pms",
+    "project-type": "webview",
+    "icon": "./assets/icon/icon.png",
+    "dist-path": "./dist",
+    "permission": [
+        "android.permission.INTERNET"
+    ],
+    "description": "Unoffical PimpMyStremio on android app",
+    "main": "main.js",
+    "scripts": {
+        "start:dev": "node .",
+        "build:debug": "androidjs build",
+        "build": "androidjs build --release"
+    },
+    "author": "Sleeyax",
+    "license": "MIT",
+    "dependencies": {
+        "androidjs": "^2.0.2"
+    },
+    "project-name": "pms-android",
+    "theme": {
+        "fullScreen": true
+    }
+}
