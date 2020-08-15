@@ -4,6 +4,7 @@ No [hacks](https://gist.github.com/sleeyax/e9635eb352a4fcdf94194f763d743689) req
 
 ## Setup
 ```Bash
+$ git submodule init
 $ npm install
 ```
 

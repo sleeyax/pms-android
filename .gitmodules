@@ -1,0 +1,3 @@
+[submodule "PimpMyStremio"]
+	path = PimpMyStremio
+	url = https://github.com/sungshon/PimpMyStremio.git
