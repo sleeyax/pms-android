@@ -4,6 +4,7 @@ process.env['NO_CHILDREN'] = '1'
 
 const back = require('androidjs').back
 const {init} = require('./src/bootstrap');
+const {writeToLog} = require('./src/helpers');
 
 back.on('init', async () => {
 	let msg = 'done'
@@ -16,4 +17,5 @@ back.on('init', async () => {
 	}
 });
 
+back.on('log', writeToLog)
 

@@ -8,16 +8,13 @@ const cleanUp = require('../PimpMyStremio/src/lib/cleanUp')
 const sideload = require('../PimpMyStremio/src/lib/sideload')
 const login = require('../PimpMyStremio/src/lib/login')
 const path = require('path')
-const {writeToLog} = require('./helpers')
 
 // monkey patch console.log() & console.error() to get more control over what it does
 const back = require('androidjs').back
 console.log = function (msg) {
-  writeToLog(msg)
 	back.send('log', msg)
 }
 console.error = function (msg) {
-  writeToLog(msg, true)
 	back.send('log', msg, 'text-danger')
 }
 
