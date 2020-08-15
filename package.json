@@ -19,10 +19,7 @@
     "author": "Sleeyax",
     "license": "MIT",
     "dependencies": {
-        "androidjs": "^2.0.2",
-        "express": "^4.17.1",
-        "get-port": "^5.1.1",
-        "my-local-ip": "^1.0.0"
+        "androidjs": "^2.0.2"
     },
     "project-name": "pms-android",
     "theme": {
