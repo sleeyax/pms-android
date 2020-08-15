@@ -1,14 +1,32 @@
 # pms-android
-Run [PimpMyStremio](https://github.com/sungshon/PimpMyStremio) natively on android. 
-No [hacks](https://gist.github.com/sleeyax/e9635eb352a4fcdf94194f763d743689) required.
+Run [PimpMyStremio](https://github.com/sungshon/PimpMyStremio) as a hybrid app on android. 
+No [hacks with Termux](https://gist.github.com/sleeyax/e9635eb352a4fcdf94194f763d743689) required.
 
-## Setup
+Please note that this app is experimental and not being developed by the original developer of PMS.
+
+## FAQ
+**Why is this apps so big (100 MB)?**
+
+Because PMS is built with NodeJS - and android doesn't support NodeJS natively - the whole Node runtime has to be packed with the application. That by itself is +- 50 MB already. The remaining megabytes are a result of all dependenices that need to be packed as well.
+
+**Addon X is not working?!**
+
+Not my fault. Some addons require dependencies that are not supported on android and thus will not work. See [this issue on the PMS repo](https://github.com/sungshon/PimpMyStremio/issues/51) for more information.
+
+**\<insert any PMS feature here\> is not working?!**
+
+For any issue unrelated to this app, please [report it here](https://github.com/sungshon/PimpMyStremio/issues).
+
+
+
+## Developers
+### Setup
 ```Bash
 $ git submodule init
 $ npm install
 ```
 
-## Build
+### Build
 Production:
 ```bash
 $ npm run build
