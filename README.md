@@ -47,3 +47,9 @@ Development:
 $ npm run build:debug
 ```
 
+## Sign APK
+```bash
+$ apksigner sign --ks <path_to_keystore> --out dist/pms-android-vxxx-beta.apk dist/pms-android.apk
+$ apksigner verify dist/pms-android-vxxx-beta.apk
+```
+
