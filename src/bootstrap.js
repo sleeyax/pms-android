@@ -48,7 +48,7 @@ let serverHost
 let serverPort
 let serverProtocol
 
-async function init() {
+async function init(onServerLoaded) {
 
 	serverPort = await getPort({ port: [userConfig.serverPort, 3030] })
 
@@ -59,7 +59,7 @@ async function init() {
 		url += '?port=' + serverPort + '&protocol=' + serverProtocol + '&host=' + encodeURIComponent(serverHost)
 
 		addon.init(userConfig.runningAddons, () => {
-			sideload.loadAll(runServer)
+			sideload.loadAll(() => runServer(onServerLoaded))
 		}, cleanUp.restart, (task, started, total) => {
 			loadMsg = 'Starting addon: ' + started + ' / ' + total + '///"' + task.name + '"'
 		})
@@ -120,7 +120,7 @@ async function init() {
 
 }
 
-async function runServer() {
+async function runServer(loadedCb) {
 
 	router.get('/login-api', (req, res) => {
 		const query = req.query || {}
@@ -193,11 +193,11 @@ async function runServer() {
 	proxy.setEndpoint(url)
 
 	console.log('PimpMyStremio server running at: ' + url)
+	if (loadedCb) loadedCb(url)
 
 	systray.init()
 
 	loadFinished = true
-
 }
 
 module.exports = {init};

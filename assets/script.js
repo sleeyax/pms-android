@@ -1,18 +1,17 @@
-function updateLog(msg, msgColor = 'text-white') {
-	var time = new Date().toTimeString().split(" ")[0];
-	$("#log").append("<span class=\"" + msgColor + "\">" + "[" + time + "]: " + msg + "<br></span>");
+function updateMsg(msg, color = 'text-success') {
+	$('#msg').html('<span class="' + color + '">' + msg + '</span>');
 }
 
-front.on("log", function (msg, color) {
-	msg = typeof msg === 'object' ? JSON.stringify(msg) : msg
+front.on('log', function (msg, color = 'text-success') {
+	msg = typeof msg === 'object' ? JSON.stringify(msg) : msg;
 
-	updateLog(msg, color);
+	updateMsg(msg, color);
 	
-	const logDir = app.getPath('userData')
-	const isError = color === 'text-danger'
+	const logDir = app.getPath('userData');
+	const isError = color === 'text-danger';
 
 	if (logDir != null && logDir != -1)
-		front.send('log', msg, logDir, isError)
+		front.send('log', msg, logDir, isError);
 
 	if (isError)
 		console.error(msg);
@@ -20,8 +19,9 @@ front.on("log", function (msg, color) {
 		console.log(msg);
 });
 
-$('#init').click(function () {
-	front.send("init");
+front.on('done', function (url) {
+	app.loadURL(url);
 });
 
-updateLog("Waiting for user action");
+front.send('init');
+updateMsg('Loading ...');

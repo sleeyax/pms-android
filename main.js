@@ -7,15 +7,13 @@ const {init} = require('./src/bootstrap');
 const {writeToLog} = require('./src/helpers');
 
 back.on('init', async () => {
-	let msg = 'done'
-
 	try {
-		await init()
-		back.send('log', 'Initialized', 'text-white')
+		const url = await init((url) => {
+			back.send('done', url)
+		})
 	} catch (ex) {
-		back.send('log', 'failed to initialize (' + ex + ')', 'text-danger')
+		back.send('log', 'Failed to load (' + ex + '). See logs for details!', 'text-danger')
 	}
 });
 
 back.on('log', writeToLog)
-
