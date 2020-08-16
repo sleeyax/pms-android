@@ -25,17 +25,19 @@ const timer = setInterval(() => {
 }, 3000);
 
 back.on('init', async () => {
-	const updateUiMsg = true;
+	// avoid duplicate app instances
+	const status = getStatus()
+	if (status.redirect) {
+		back.send('done', status.redirect)
+		return
+	}
 
+	// start PMS
 	try {
 		await init()
 	} catch (ex) {
-		back.send('log', 'Failed to load (' + ex + '). See logs for details!', 'text-danger', updateUiMsg)
+		back.send('log', 'Failed to load (' + ex + '). See logs for details!', 'text-danger', true)
 	}
-})
-
-back.on('status', () => {
-	back.send('status', getStatus())
 })
 
 back.on('log', writeToLog)
