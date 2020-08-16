@@ -9,6 +9,10 @@ Please note that this app is experimental and not being developed by the origina
 
 Because PMS is built with NodeJS - and android doesn't support NodeJS natively - the whole Node runtime must be bundled with the application. That by itself is +- 50 MB already. The remaining megabytes are a result of all dependenices that need to be bundled as well.
 
+**Streams sometimes don't load anymore untill I reopen the app**
+
+PMS has to keep running in the background in order to work. Your phone might have an aggressive battery saver enabled that's restricting or disabling PMS while it runs in the background. Please refer to [dontkillmyapp.com](https://dontkillmyapp.com/) for device specific instructions on how to disable it.
+
 **Addon X is not working?!**
 
 Not my fault. Some addons require dependencies that are not supported on android and thus will not work. See [this issue on the PMS repo](https://github.com/sungshon/PimpMyStremio/issues/51) for more information.
