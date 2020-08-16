@@ -1,14 +1,19 @@
-function updateMsg(msg, color = 'text-success') {
+function updateUiMsg(msg, color = 'text-success') {
 	$('#msg').html('<span class="' + color + '">' + msg + '</span>');
 }
 
-front.on('log', function (msg, color = 'text-success') {
+function doneLoading(url) {
+	app.loadURL(url);
+}
+
+front.on('log', function (msg, color = 'text-success', shouldUpdateUiMsg = false) {
 	msg = typeof msg === 'object' ? JSON.stringify(msg) : msg;
 
-	updateMsg(msg, color);
-	
-	const logDir = app.getPath('userData');
-	const isError = color === 'text-danger';
+	if (shouldUpdateUiMsg)
+		updateUiMsg(msg, color);
+
+	var logDir = app.getPath('userData');
+	var isError = color === 'text-danger';
 
 	if (logDir != null && logDir != -1)
 		front.send('log', msg, logDir, isError);
@@ -19,9 +24,7 @@ front.on('log', function (msg, color = 'text-success') {
 		console.log(msg);
 });
 
-front.on('done', function (url) {
-	app.loadURL(url);
-});
+front.on('done', doneLoading);
 
 front.send('init');
-updateMsg('Loading ...');
+updateUiMsg('Loading ...');

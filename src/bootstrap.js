@@ -3,16 +3,17 @@ const getPort = require('../PimpMyStremio/src/node_modules/get-port')
 const addon = require('../PimpMyStremio/src/lib/addon')
 const uConfig = require('../PimpMyStremio/src/lib/config/userConfig')
 const userConfig = uConfig.read().userDefined
+const runningAddons = uConfig.read().runningAddons
 const proxy = require('../PimpMyStremio/src/lib/proxy')
 const cleanUp = require('../PimpMyStremio/src/lib/cleanUp')
 const sideload = require('../PimpMyStremio/src/lib/sideload')
 const login = require('../PimpMyStremio/src/lib/login')
 const path = require('path')
 
-// monkey patch console.log() & console.error() to get more control over what it does
+// monkey patch console.log() & console.error() so we can write output to log file instead
 const back = require('androidjs').back
 console.log = function (msg) {
-	back.send('log', msg)
+	back.send('log', msg, 'text-success')
 }
 console.error = function (msg) {
 	back.send('log', msg, 'text-danger')
@@ -38,7 +39,7 @@ let loadMsg = 'Loading ...'
 let loadFinished = false
 
 router.get('/loading-api', (req, res) => {
-	respond(res, loadFinished ? { redirect: proxy.getEndpoint() } : { msg: loadMsg })
+	respond(res, getStatus())
 })
 
 router.use(express.static(path.join(__dirname, '..', 'PimpMyStremio/src/web')))
@@ -48,20 +49,19 @@ let serverHost
 let serverPort
 let serverProtocol
 
-async function init(onServerLoaded) {
+function getStatus() {
+	return loadFinished ? { redirect: proxy.getEndpoint() } : { msg: loadMsg };
+}
 
-	serverPort = await getPort({ port: [userConfig.serverPort, 3030] })
+async function init() {
+
+	serverPort = await getPort({ port: userConfig.serverPort })
 
 	function listenHandler() {
-
-		let url = 'https://sungshon.github.io/PimpMyStremio/loader/'
-
-		url += '?port=' + serverPort + '&protocol=' + serverProtocol + '&host=' + encodeURIComponent(serverHost)
-
-		addon.init(userConfig.runningAddons, () => {
-			sideload.loadAll(() => runServer(onServerLoaded))
+		addon.init(runningAddons, () => {
+			sideload.loadAll(runServer)
 		}, cleanUp.restart, (task, started, total) => {
-			loadMsg = 'Starting addon: ' + started + ' / ' + total + '///"' + task.name + '"'
+			loadMsg = `Starting ${task.name}\naddon(${started} / ${total})`
 		})
 	}
 
@@ -120,7 +120,7 @@ async function init(onServerLoaded) {
 
 }
 
-async function runServer(loadedCb) {
+async function runServer() {
 
 	router.get('/login-api', (req, res) => {
 		const query = req.query || {}
@@ -150,8 +150,8 @@ async function runServer(loadedCb) {
 			addon[method](addon.getManifest(name), decodeURIComponent(query.payload)).then(resp => {
 				respond(res, resp)
 			}).catch(err => {
-        console.error(err)
-        fail(res)
+				console.error(err)
+				fail(res)
 			})
 		} else
 			fail(res)
@@ -193,11 +193,8 @@ async function runServer(loadedCb) {
 	proxy.setEndpoint(url)
 
 	console.log('PimpMyStremio server running at: ' + url)
-	if (loadedCb) loadedCb(url)
-
-	systray.init()
 
 	loadFinished = true
 }
 
-module.exports = {init};
+module.exports = { init, getStatus };

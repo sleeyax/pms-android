@@ -3,17 +3,39 @@
 process.env['NO_CHILDREN'] = '1'
 
 const back = require('androidjs').back
-const {init} = require('./src/bootstrap');
-const {writeToLog} = require('./src/helpers');
+const { init, getStatus } = require('./src/bootstrap');
+const { writeToLog } = require('./src/helpers');
+
+const timer = setInterval(() => {
+	const status = getStatus();
+
+	if (status.redirect) {
+		clearInterval(timer);
+		back.send('done', status.redirect)
+	} else if (status.msg) {
+		const splitted = status.msg.split('\n')
+		if (splitted.length == 2) {
+			back.send('log', status.msg + '<br><br><strong>' + splitted[1] + '</strong>', 'text-success', true)
+		} else {
+			back.send('log', status.msg)
+		}
+	} else {
+		back.send('log', 'status is null', 'text-danger')
+	}
+}, 3000);
 
 back.on('init', async () => {
+	const updateUiMsg = true;
+
 	try {
-		const url = await init((url) => {
-			back.send('done', url)
-		})
+		await init()
 	} catch (ex) {
-		back.send('log', 'Failed to load (' + ex + '). See logs for details!', 'text-danger')
+		back.send('log', 'Failed to load (' + ex + '). See logs for details!', 'text-danger', updateUiMsg)
 	}
-});
+})
+
+back.on('status', () => {
+	back.send('status', getStatus())
+})
 
 back.on('log', writeToLog)
