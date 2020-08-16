@@ -21,6 +21,10 @@ For any issue unrelated to this app, please [report it at the PMS repo](https://
 
 Open an issue [here](https://github.com/sleeyax/pms-android/issues) describing what you expected to happen, what actually happened and optionally attach your application log file. Said log file can be found at `/sdcard/Android/data/com.androidjs.sleeyax.pms/files/log.txt`.
 
+## Screenshots
+![screenshot 1](https://i.imgur.com/RGrIfzn.jpeg)
+![screenshot 2](https://i.imgur.com/N8OKq1b.jpeg)
+
 ## Developers
 ### Setup
 ```Bash
