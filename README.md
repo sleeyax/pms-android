@@ -1,4 +1,9 @@
 # pms-android
+
+**NO LONGER MAINTAINED. Since PimpMyStremio doesn't seem to be actively maintained anymore it doesn't make sense to me to develop this project any further as well.**
+
+---
+
 Run [PimpMyStremio](https://github.com/sungshon/PimpMyStremio) as a hybrid app on android. 
 No [hacks with Termux](https://gist.github.com/sleeyax/e9635eb352a4fcdf94194f763d743689) required.
 
